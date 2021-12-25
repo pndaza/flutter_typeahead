@@ -1263,25 +1263,27 @@ class _SuggestionsListState<T> extends State<_SuggestionsList<T>>
   }
 
   Widget createSuggestionsWidget() {
-    Widget child = ListView(
-      padding: EdgeInsets.zero,
-      primary: false,
-      shrinkWrap: true,
-      controller: _scrollController,
-      reverse: widget.suggestionsBox!.direction == AxisDirection.down
-          ? false
-          : true, // reverses the list to start at the bottom
-      children: this._suggestions!.map((T suggestion) {
-        return InkWell(
-          child: widget.itemBuilder!(context, suggestion),
-          onTap: () {
-            widget.onSuggestionSelected!(suggestion);
-          },
-        );
-      }).toList(),
-    );
+    // switch to ListView.builder for better performance with huge suggestion entries
+    Widget child = ListView.builder(
+        padding: EdgeInsets.zero,
+        primary: false,
+        shrinkWrap: true,
+        controller: _scrollController,
+        reverse: widget.suggestionsBox!.direction == AxisDirection.down
+            ? false
+            : true, // reverses the list to start at the bottom
+        itemCount: _suggestions?.length,
+        itemBuilder: (_, index) {
+          return InkWell(
+            child: widget.itemBuilder!(
+                context, _suggestions?.elementAt(index) as T),
+            onTap: () {
+              widget.onSuggestionSelected!(_suggestions?.elementAt(index) as T);
+            },
+          );
+        });
 
-    if (widget.decoration!.hasScrollbar) {
+    if (widget.decoration?.hasScrollbar == true) {
       child = Scrollbar(
         controller: _scrollController,
         child: child,
