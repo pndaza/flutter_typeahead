@@ -1,3 +1,7 @@
+## 3.3.0 - 1-Sep-2022
+-- support flutter 2.x and 3.x
+-- improve suggestion list performance
+
 ## 3.2.4 - 9-Dec-2021
 
 -- PR #360 - Resize before opening box (fixes issue 220)
